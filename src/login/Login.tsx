@@ -4,7 +4,7 @@ import {Button, Container} from "react-bootstrap";
 import {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
 import {HOST} from "../const/global.const";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 interface LoginProps {
     email: string;
@@ -16,6 +16,7 @@ const Login = () => {
         email: '',
         password: '',
     });
+    const navigate = useNavigate();
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
@@ -34,6 +35,12 @@ const Login = () => {
                 password: login.password,
             });
             console.log(response);
+            if(response.status === 201) {
+                const {accessToken, refreshToken} = response.data;
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
+                navigate('/groups');
+            }
         } catch (err) {
             console.error(err);
         }

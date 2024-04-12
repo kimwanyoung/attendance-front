@@ -2,7 +2,7 @@ import Form from "react-bootstrap/Form";
 import InputForm from "../commons/components/InputForm";
 import InputSelect from "../commons/components/InputSelect";
 import {Button, Container} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Gender} from "../types/genter.enum";
 import React, {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
@@ -25,6 +25,7 @@ const Register = () => {
         gender: Gender.MALE,
         phone: '',
     })
+    const navigate = useNavigate();
 
     const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const {name, value} = event.target;
@@ -42,7 +43,12 @@ const Register = () => {
                 ...register
             });
 
-            console.log(response);
+            if(response.status === 201) {
+                const {accessToken, refreshToken} = response.data;
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('refreshToken', refreshToken);
+                navigate('/groups');
+            }
         } catch (err) {
             console.error(err);
         }
