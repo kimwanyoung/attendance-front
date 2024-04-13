@@ -5,6 +5,7 @@ import Login from "./login/Login";
 import Register from "./register/Register";
 import Groups from "./groups/Group";
 import GlobalNavbar from "./commons/components/GlobalNavBar";
+import GroupsDetail from "./groups/GroupsDetail";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
               <Route path={"/"} element={<Login />}/>
               <Route path={"/register"} element={<Register />}/>
               <Route path={"/groups"} element={<Groups />}/>
+              <Route path={"/groups/:id"} element={<GroupsDetail />}/>
           </Routes>
       </BrowserRouter>
   );
