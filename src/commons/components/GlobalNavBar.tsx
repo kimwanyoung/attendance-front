@@ -13,7 +13,11 @@ const GlobalNavbar = () => {
 
     return (
         <>
-            <Navbar className="bg-body-tertiary" style={{minWidth: "100%"}}>
+            <Navbar className="bg-body-tertiary" style={{
+                minWidth: "100%", fontFamily: "Gamja Flower",
+                fontWeight: 400,
+                fontStyle: "normal",
+            }}>
                 <Container>
                     <Navbar.Brand href="/groups">
                         <img

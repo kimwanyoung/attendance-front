@@ -3,6 +3,7 @@ import GroupCard from "../commons/components/GroupCard";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {HOST} from "../const/global.const";
+import {retryRequest, rotateAccessToken} from "../utils/manageToken";
 
 export interface GroupProps {
     id: number;
@@ -14,18 +15,23 @@ export interface GroupProps {
 const Groups = () => {
     const [groups, setGroups] = useState<GroupProps[]>([]);
 
+    const getGroups = async () => {
+        const response = await axios.get(`${HOST}/membership`, {
+            headers: {
+                'authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+            }
+        })
+        return response.data;
+    }
+
     useEffect(() => {
         const getAllGroupsById = async () => {
             try {
-                const response = await axios.get(`${HOST}/membership`, {
-                    headers: {
-                        'authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-                    }
-                })
-                console.log(response.data);
-                setGroups(response.data);
+                const groups = await getGroups();
+                setGroups(groups);
             } catch (err) {
-                console.error(err);
+                await retryRequest(err, getGroups);
+                window.location.reload();
             }
         }
         getAllGroupsById();
