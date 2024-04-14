@@ -19,11 +19,11 @@ const rotateAccessToken = async () => {
     return accessToken;
 }
 
-const retryRequest = async (err: unknown, retryMethod: any, event?: FormEvent) => {
+const retryRequest = async (err: unknown, retryMethod?: any, event?: FormEvent) => {
     if(axios.isAxiosError(err) && err.response?.status === 401) {
         try {
             await rotateAccessToken();
-            await retryMethod(event);
+            retryMethod && retryMethod(event);
         } catch (err) {
             console.error('Falid to rotate access token', err);
         }

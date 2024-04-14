@@ -29,7 +29,8 @@ const GlobalNavbar = () => {
                         />
                         Attendance
                     </Navbar.Brand>
-                    <Button variant="success" onClick={handleShow}>그룹생성</Button>
+                    { location.pathname === '/groups' &&
+                        <Button variant="success" onClick={handleShow}>그룹생성</Button>}
                 </Container>
             </Navbar>
             <CreateGroupModal show={show} onHide={handleClose}/>

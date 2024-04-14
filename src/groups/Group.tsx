@@ -30,9 +30,14 @@ const Groups = () => {
                 const groups = await getGroups();
                 setGroups(groups);
             } catch (err) {
-                await retryRequest(err, getGroups);
+                try {
+                    await retryRequest(err, getGroups);
+                } catch (err) {
+                    console.error('재요청 에러 발생.');
+                }
                 window.location.reload();
             }
+
         }
         getAllGroupsById();
     }, [])
