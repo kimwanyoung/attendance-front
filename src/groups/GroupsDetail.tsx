@@ -5,7 +5,7 @@ import {useCallback, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {HOST} from "../const/global.const";
 import axios from "axios";
-import {retryRequest} from "../utils/manageToken";
+import {ManageToken} from "../utils/manageToken";
 import CreatePostModal from "../posts/CreatePostModal";
 import NoticeTitle, {NoticeTitleProps} from "../notice/NoticeTitle";
 
@@ -44,16 +44,10 @@ const GroupsDetail = () => {
 
     const getAllPosts = useCallback(async () => {
         try {
-            const postsData = await findAllPostsByGroupId();
-            setPosts(postsData);
+            setPosts(await findAllPostsByGroupId());
         } catch (err) {
-            try {
-                await retryRequest(err);
-                const retryPosts = await findAllPostsByGroupId();
-                setPosts(retryPosts);
-            } catch (error) {
-                console.error('재요청 에러 발생.');
-            }
+            await ManageToken.rotateToken();
+            setPosts(await findAllPostsByGroupId());
         }
     }, [findAllPostsByGroupId]);
 
@@ -76,7 +70,7 @@ const GroupsDetail = () => {
                 </ListGroup.Item>
                 <Container>
                     {posts.map(post => {
-                        return <PostCard id={post.id} key={post.id} title={post.title} contents={post.contents}
+                        return <PostCard groupId={Number(param.id)} id={post.id} key={post.id} title={post.title} contents={post.contents}
                                          startData={post.startData} endDate={post.endDate} author={post.author}/>
                     })}
                     <CreatePostModal show={show} onHide={handleModalOpen}/>

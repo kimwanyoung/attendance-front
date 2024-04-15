@@ -1,7 +1,6 @@
-import {Button, Container, Modal, Navbar, NavDropdown} from "react-bootstrap";
+import {Button, Container, Navbar} from "react-bootstrap";
 import {useLocation} from "react-router-dom";
 import {useState} from "react";
-import Form from "react-bootstrap/Form";
 import CreateGroupModal from "../../groups/CreateGroupModal";
 
 const GlobalNavbar = () => {

@@ -1,9 +1,9 @@
 import {Container} from "react-bootstrap";
 import GroupCard from "../commons/components/GroupCard";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import {HOST} from "../const/global.const";
-import {retryRequest, rotateAccessToken} from "../utils/manageToken";
+import {ManageToken} from "../utils/manageToken";
 
 export interface GroupProps {
     id: number;
@@ -15,32 +15,28 @@ export interface GroupProps {
 const Groups = () => {
     const [groups, setGroups] = useState<GroupProps[]>([]);
 
-    const getGroups = async () => {
+    const getGroups = useCallback(async () => {
         const response = await axios.get(`${HOST}/membership`, {
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`,
             }
         })
         return response.data;
-    }
+    }, []);
+
+    const getAllGroupsById = useCallback(async () => {
+        try {
+            setGroups(await getGroups());
+        } catch (err) {
+            await ManageToken.rotateToken();
+            setGroups(await getGroups());
+            window.location.reload();
+        }
+    }, [getGroups]);
 
     useEffect(() => {
-        const getAllGroupsById = async () => {
-            try {
-                const groups = await getGroups();
-                setGroups(groups);
-            } catch (err) {
-                try {
-                    await retryRequest(err, getGroups);
-                } catch (err) {
-                    console.error('재요청 에러 발생.');
-                }
-                window.location.reload();
-            }
-
-        }
         getAllGroupsById();
-    }, [])
+    }, [getAllGroupsById])
 
     return (
         <Container  className="d-flex flex-column justify-content-start" style={{minHeight: "100vh"}}>

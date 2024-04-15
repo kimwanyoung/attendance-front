@@ -3,7 +3,7 @@ import {Button, Modal} from "react-bootstrap";
 import React, {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
 import {HOST} from "../const/global.const";
-import {retryRequest} from "../utils/manageToken";
+import {ManageToken} from "../utils/manageToken";
 
 interface CreateGroupProps {
     show: boolean
@@ -43,7 +43,8 @@ const CreateGroupModal: React.FC<CreateGroupProps> = ({show, onHide}) => {
         try {
             await createGroup();
         } catch (err: unknown) {
-            await retryRequest(err, handleCreateGroupBtn, event);
+            await ManageToken.rotateToken();
+            await createGroup();
         }
         window.location.reload();
     }

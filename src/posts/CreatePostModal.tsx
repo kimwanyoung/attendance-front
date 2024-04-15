@@ -3,22 +3,10 @@ import {Button, Modal} from "react-bootstrap";
 import React, {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
 import {HOST} from "../const/global.const";
-import {retryRequest} from "../utils/manageToken";
 import {useParams} from "react-router-dom";
 import {formatDate} from "../utils/convertDate";
-
-interface PostModalProps {
-    show: boolean
-    onHide: () => void;
-}
-
-interface CreatePostProps {
-    title: string;
-    contents: string;
-    location: string;
-    eventDate: string;
-    voteDuration: number;
-}
+import {CreatePostProps, PostModalProps} from "./types/PostTypes";
+import {ManageToken} from "../utils/manageToken";
 
 const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
     const param = useParams();
@@ -52,11 +40,8 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
         try {
             await createPost();
         } catch (err: unknown) {
-            try {
-                await retryRequest(err, handleCreatePostBtn, event);
-            } catch (err) {
-                console.log('토큰 재발급 에러');
-            }
+            await ManageToken.rotateToken();
+            await createPost();
         }
         window.location.reload();
     }
