@@ -1,5 +1,4 @@
 import ListGroup from "react-bootstrap/esm/ListGroup";
-import GlobalPagination from "../commons/components/GlobalPagination";
 import {Button, Container} from "react-bootstrap";
 import PostCard, {PostCardProps} from "../commons/components/PostCard";
 import {useCallback, useEffect, useState} from "react";
@@ -8,6 +7,22 @@ import {HOST} from "../const/global.const";
 import axios from "axios";
 import {retryRequest} from "../utils/manageToken";
 import CreatePostModal from "../posts/CreatePostModal";
+import NoticeTitle, {NoticeTitleProps} from "../notice/NoticeTitle";
+
+const mockNotices: NoticeTitleProps[] = [
+    {
+        orderNumber: 1,
+        title: '중요 공지사항 남깁니다.',
+    },
+    {
+        orderNumber: 2,
+        title: '이번주 경기 일정.',
+    },{
+        orderNumber: 3,
+        title: '부상자 명단.',
+    },
+
+]
 
 const GroupsDetail = () => {
     const [posts, setPosts] = useState<PostCardProps[]>([]);
@@ -31,7 +46,6 @@ const GroupsDetail = () => {
         try {
             const postsData = await findAllPostsByGroupId();
             setPosts(postsData);
-            console.log(postsData);
         } catch (err) {
             try {
                 await retryRequest(err);
@@ -44,31 +58,28 @@ const GroupsDetail = () => {
     }, [findAllPostsByGroupId]);
 
     useEffect(() => {
-        console.log('sss');
         getAllPosts();
     }, [getAllPosts]);
 
     return (
         <>
             <ListGroup variant='flush'>
-                <ListGroup.Item className="fw-semibold" variant="success">공지사항</ListGroup.Item>
-                <ListGroup.Item>Cras justo odio</ListGroup.Item>
-                <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-                <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-                <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
+                <ListGroup.Item className="fw-bold" variant="success">공지사항</ListGroup.Item>
+                {mockNotices.map((notice) => (
+                    <NoticeTitle key={notice.orderNumber} orderNumber={notice.orderNumber} title={notice.title} />
+                ))}
             </ListGroup>
-            <GlobalPagination/>
             <ListGroup variant='flush'>
-                    <ListGroup.Item className="fw-semibold d-flex align-items-center justify-content-between" variant="success">
-                        일정 목록
-                        <Button variant="success" size="sm" onClick={handleModalOpen}>일정 생성</Button>
-                    </ListGroup.Item>
+                <ListGroup.Item className="fw-semibold d-flex align-items-center justify-content-between" variant="success">
+                    일정 목록
+                    <Button variant="success" size="sm" onClick={handleModalOpen}>일정 생성</Button>
+                </ListGroup.Item>
                 <Container>
                     {posts.map(post => {
                         return <PostCard id={post.id} key={post.id} title={post.title} contents={post.contents}
                                          startData={post.startData} endDate={post.endDate} author={post.author}/>
                     })}
-                    <CreatePostModal show={show} onHide={handleModalOpen} />
+                    <CreatePostModal show={show} onHide={handleModalOpen}/>
                 </Container>
             </ListGroup>
         </>

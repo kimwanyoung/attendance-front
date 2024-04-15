@@ -7,7 +7,7 @@ export interface PostCardProps {
     contents: string;
     startData: Date;
     endDate: Date;
-    author: { email: string };
+    author: { name: string };
 }
 
 const PostCard:React.FC<PostCardProps> = ({id, title, contents, startData, endDate, author}) => {
@@ -20,7 +20,7 @@ const PostCard:React.FC<PostCardProps> = ({id, title, contents, startData, endDa
                     {contents}
                 </Card.Text>
             </Card.Body>
-            <Card.Footer className="text-muted" style={{fontSize:'70%'}}>생성자: {author.email}</Card.Footer>
+            <Card.Footer className="text-muted" style={{fontSize:'70%'}}>생성자: {author.name}</Card.Footer>
         </Card>
     )
 }

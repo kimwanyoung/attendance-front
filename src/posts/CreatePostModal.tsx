@@ -15,9 +15,9 @@ interface PostModalProps {
 interface CreatePostProps {
     title: string;
     contents: string;
-    place: string;
-    startDate: string;
-    votingPeriod: number;
+    location: string;
+    eventDate: string;
+    voteDuration: number;
 }
 
 const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
@@ -25,9 +25,9 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
     const [createPostData, setCreatePostData] = useState<CreatePostProps>({
         title: '',
         contents: '',
-        place: '',
-        startDate: formatDate(new Date()),
-        votingPeriod: 1,
+        location: '',
+        eventDate: formatDate(new Date()),
+        voteDuration: 1,
     });
 
     const handleChangeCreatePostInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -47,13 +47,13 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
         });
     }
 
-    const handleCreateGroupBtn = async (event: FormEvent<HTMLFormElement>) => {
+    const handleCreatePostBtn = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
             await createPost();
         } catch (err: unknown) {
             try {
-                await retryRequest(err, handleCreateGroupBtn, event);
+                await retryRequest(err, handleCreatePostBtn, event);
             } catch (err) {
                 console.log('토큰 재발급 에러');
             }
@@ -63,7 +63,7 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
 
     return (
         <Modal show={show} onHide={onHide} animation={true} centered>
-            <Form onSubmit={handleCreateGroupBtn}>
+            <Form onSubmit={handleCreatePostBtn}>
                 <Modal.Header closeButton>
                     <Modal.Title>일정 생성</Modal.Title>
                 </Modal.Header>
@@ -75,22 +75,22 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>일정 설명</Form.Label>
-                        <Form.Control as="textarea" name="description" value={createPostData.contents}
+                        <Form.Control as="textarea" name="contents" value={createPostData.contents}
                                       onChange={handleChangeCreatePostInput} rows={3}/>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>장소</Form.Label>
-                        <Form.Control type="text" name="place" value={createPostData.contents}
+                        <Form.Control type="text" name="location" value={createPostData.location}
                                       onChange={handleChangeCreatePostInput} placeholder="장소를 입력해주세요."/>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>날짜</Form.Label>
-                        <Form.Control type="DATE" name="startDate" value={createPostData.startDate}
+                        <Form.Control type="DATE" name="eventDate" value={createPostData.eventDate}
                                       onChange={handleChangeCreatePostInput}/>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>투표 기간(일)</Form.Label>
-                        <Form.Control type="text" name="votingPeriod" value={createPostData.votingPeriod}
+                        <Form.Control type="text" name="voteDuration" value={createPostData.voteDuration}
                                       onChange={handleChangeCreatePostInput}/>
                     </Form.Group>
                 </Modal.Body>
