@@ -52,7 +52,9 @@ const GroupsDetail = () => {
     }, [findAllPostsByGroupId]);
 
     useEffect(() => {
-        getAllPosts();
+        getAllPosts().catch((error) => {
+            console.error(error);
+        });;
     }, [getAllPosts]);
 
     return (

@@ -2,10 +2,8 @@ import axios from "axios";
 import {HOST} from "../const/global.const";
 
 export class ManageToken {
-    private static refreshToken = localStorage.getItem('refreshToken');
 
     static async rotateToken() {
-        console.log('rotating...');
         try {
             await this.requestToken(`${HOST}/auth/token/access`, true);
         } catch (error) {
@@ -23,5 +21,9 @@ export class ManageToken {
         });
 
         localStorage.setItem(tokenType, response.data[tokenType]);
+    }
+
+    private static get refreshToken() {
+        return localStorage.getItem('refreshToken');
     }
 }

@@ -35,7 +35,9 @@ const Groups = () => {
     }, [getGroups]);
 
     useEffect(() => {
-        getAllGroupsById();
+        getAllGroupsById().catch((error) => {
+            console.error(error);
+        });
     }, [getAllGroupsById])
 
     return (

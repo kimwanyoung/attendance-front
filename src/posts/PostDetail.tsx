@@ -29,8 +29,10 @@ const PostDetail = () => {
     }, [findPost])
 
     useEffect(() => {
-        findPostValidation();
-    }, [])
+        findPostValidation().catch((error) => {
+            console.error(error);
+        });
+    }, [findPostValidation])
     return (
         <Container>
 
