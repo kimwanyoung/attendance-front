@@ -11,7 +11,6 @@ const PostDetail = () => {
     const navigate = useNavigate();
     const {groupId, postId} = useParams();
     const [postData, setPostData] = useState<PostModel>();
-    console.log(postData);
 
     const findPost = useCallback(async () => {
         const response = await axios.get(`${HOST}/group/${groupId}/post/${postId}`, {

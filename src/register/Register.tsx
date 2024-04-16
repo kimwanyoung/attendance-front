@@ -3,7 +3,7 @@ import InputForm from "../commons/components/InputForm";
 import InputSelect from "../commons/components/InputSelect";
 import {Button, Container} from "react-bootstrap";
 import {Link, useNavigate} from "react-router-dom";
-import {Gender} from "../types/genter.enum";
+import {Gender} from "../types/gender.enum";
 import React, {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
 import {HOST} from "../const/global.const";
