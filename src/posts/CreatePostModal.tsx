@@ -7,9 +7,12 @@ import {useParams} from "react-router-dom";
 import {formatDate} from "../utils/convertDate";
 import {CreatePostProps, PostModalProps} from "./types/PostTypes";
 import {ManageToken} from "../utils/manageToken";
+import AddressModal from "../commons/components/AddressModal";
+import {Address} from "react-daum-postcode";
 
 const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
     const param = useParams();
+    const [addressShow, setAddressShow] = useState(false);
     const [createPostData, setCreatePostData] = useState<CreatePostProps>({
         title: '',
         contents: '',
@@ -27,7 +30,18 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
         }));
     }
 
-    const createPost = async ()=> {
+    const handleAddressModal = () => {
+        setAddressShow(prevState => !prevState);
+    }
+
+    const handleAddress = (data: Address) => {
+        setCreatePostData((prevState) => ({
+            ...prevState,
+            location: data.address,
+        }))
+    }
+
+    const createPost = async () => {
         return axios.post(`${HOST}/post/${param.id}`, createPostData, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
@@ -64,9 +78,12 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
                                       onChange={handleChangeCreatePostInput} rows={3}/>
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Label>장소</Form.Label>
-                        <Form.Control type="text" name="location" value={createPostData.location}
-                                      onChange={handleChangeCreatePostInput} placeholder="장소를 입력해주세요."/>
+                        <div className="d-flex align-items-center justify-content-between mb-3">
+                            <Form.Label className="mb-0">장소</Form.Label>
+                            <Button variant="success" size="sm" onClick={handleAddressModal}>주소 검색</Button>
+                        </div>
+                        <AddressModal show={addressShow} onHide={handleAddressModal} handleAddress={handleAddress}/>
+                        <Form.Control type="text" disabled={true} name="location" value={createPostData.location}/>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>날짜</Form.Label>

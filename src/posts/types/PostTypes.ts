@@ -5,7 +5,9 @@ interface PostModel {
     location: string;
     eventDate: string;
     voteDuration: number;
-    author: string;
+    author: { name: string };
+    createdAt: string;
+    endDate: string;
 }
 
 interface PostModalProps {
@@ -16,4 +18,16 @@ interface PostModalProps {
 interface CreatePostProps extends Pick<PostModel, 'title' | 'contents' | 'location' | 'eventDate' | 'voteDuration'> {
 }
 
-export type {PostModel, PostModalProps, CreatePostProps};
+interface DetailPostProps extends Pick<PostModel,
+    'title' |
+    'contents' |
+    'location' |
+    'eventDate' |
+    'author' |
+    'id' |
+    'createdAt' |
+    'endDate'
+> {
+}
+
+export type {PostModel, PostModalProps, CreatePostProps, DetailPostProps};

@@ -7,20 +7,22 @@ import Groups from "./groups/Group";
 import GlobalNavbar from "./commons/components/GlobalNavBar";
 import GroupsDetail from "./groups/GroupsDetail";
 import PostDetail from "./posts/PostDetail";
+import useKakaoLoader from "./utils/kakaoMaps/kakaoMaps";
 
 function App() {
-  return (
-      <BrowserRouter>
-          <GlobalNavbar />
-          <Routes>
-              <Route path={"/"} element={<Login />}/>
-              <Route path={"/register"} element={<Register />}/>
-              <Route path={"/groups"} element={<Groups />}/>
-              <Route path={"/groups/:id"} element={<GroupsDetail />}/>
-              <Route path={"/groups/:groupId/posts/:postId"} element={<PostDetail />}/>
-          </Routes>
-      </BrowserRouter>
-  );
+    useKakaoLoader();
+    return (
+        <BrowserRouter>
+            <GlobalNavbar/>
+            <Routes>
+                <Route path={"/"} element={<Login/>}/>
+                <Route path={"/register"} element={<Register/>}/>
+                <Route path={"/groups"} element={<Groups/>}/>
+                <Route path={"/groups/:id"} element={<GroupsDetail/>}/>
+                <Route path={"/groups/:groupId/posts/:postId"} element={<PostDetail/>}/>
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
