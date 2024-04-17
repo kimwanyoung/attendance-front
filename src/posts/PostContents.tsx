@@ -49,9 +49,9 @@ const PostContents: React.FC<DetailPostProps> = (
     }
 
     return (
-        <div className="container mt-4">
+        <div className="container mt-4 d-flex align-items-center justify-content-center flex-column">
             <div className="row">
-                <div className="col-lg-8">
+                <div>
                     <article>
                         <header className="mb-4">
                             <h1 className="fw-bolder mb-1">{title}</h1>
