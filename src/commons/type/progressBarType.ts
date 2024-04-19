@@ -1,8 +1,8 @@
 import {VoteStatus} from "../../types/vote-status.enum";
 
 interface ProgressBarType {
-    now: number;
-    max: number;
+    now?: number;
+    max?: number;
     label: string;
     voteStatus: VoteStatus;
     name: VoteStatus;
@@ -10,7 +10,7 @@ interface ProgressBarType {
 }
 
 interface ProgressProps {
-    width: number;
+    width?: number;
 }
 
 export type {ProgressBarType, ProgressProps}

@@ -1,14 +1,15 @@
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {DetailPostProps} from "./types/PostTypes";
 import {getRemainingDays} from "../utils/convertDate";
 import KakaoMap from "../commons/components/KakaoMap";
 import {Button, Card} from "react-bootstrap";
 import CustomProgressBar from "../commons/components/CustomProgressBar";
 import {VoteStatus} from "../types/vote-status.enum";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import {HOST} from "../const/global.const";
 import {ManageToken} from "../utils/manageToken";
+import {VoteInPostType} from "./types/Vote.type";
 
 const PostContents: React.FC<DetailPostProps> = (
     {
@@ -19,10 +20,31 @@ const PostContents: React.FC<DetailPostProps> = (
         location,
         createdAt,
         endDate,
+        memberCount,
     }
 ) => {
+    const navigate = useNavigate();
     const {groupId, postId} = useParams();
     const [voteStatus, setVoteStatus] = useState<VoteStatus>(VoteStatus.NOT_VOTED_YET);
+    const [votesData, setVotesData] = useState<VoteInPostType>()
+
+    const findVotes = useCallback(async () => {
+        const response = await axios.get(`${HOST}/vote/${postId}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+        return response.data;
+    }, [postId])
+
+    const findVoteValidation = useCallback(async () => {
+        try {
+            setVotesData(await findVotes());
+        } catch (error) {
+            await ManageToken.rotateToken();
+            setVotesData(await findVotes());
+        }
+    }, [findVotes])
 
     const handleVoteStatus = (voteType: VoteStatus) => {
         setVoteStatus(voteType);
@@ -42,10 +64,23 @@ const PostContents: React.FC<DetailPostProps> = (
     const handleSubmitVoteStatus = async () => {
         try {
             await requestVote();
+            await findVoteValidation();
         } catch (err) {
             await ManageToken.rotateToken();
             await requestVote();
+            await findVoteValidation();
         }
+    }
+
+    useEffect(() => {
+        findVoteValidation().catch((error) => {
+            console.error(error);
+            navigate('/');
+        })
+    }, [findVoteValidation, navigate]);
+
+    const calculateVoteCountByType = (type: VoteStatus) => {
+        return votesData?.allVotes.filter((data) => data.voteStatus === type).length;
     }
 
     return (
@@ -72,8 +107,8 @@ const PostContents: React.FC<DetailPostProps> = (
                         <section className="mb-5">
                             <Card className="mt-2">
                                 <Card.Body>
-                                    <CustomProgressBar max={20} now={8} label="참석" name={VoteStatus.PARTICIPATED} onClick={() => handleVoteStatus(VoteStatus.PARTICIPATED)} voteStatus={voteStatus}/>
-                                    <CustomProgressBar max={20} now={3} label="불참" name={VoteStatus.NOT_PARTICIPATED} onClick={() => handleVoteStatus(VoteStatus.NOT_PARTICIPATED)} voteStatus={voteStatus}/>
+                                    <CustomProgressBar max={votesData?.allVotes.length} now={votesData && calculateVoteCountByType(VoteStatus.PARTICIPATED)} label="참석" name={VoteStatus.PARTICIPATED} onClick={() => handleVoteStatus(VoteStatus.PARTICIPATED)} voteStatus={voteStatus}/>
+                                    <CustomProgressBar max={votesData?.allVotes.length} now={votesData && calculateVoteCountByType(VoteStatus.NOT_PARTICIPATED)} label="불참" name={VoteStatus.NOT_PARTICIPATED} onClick={() => handleVoteStatus(VoteStatus.NOT_PARTICIPATED)} voteStatus={voteStatus}/>
                                     <div className="d-flex align-items-center justify-content-between">
                                         <p className="text-muted m-0">투표 마감 : {getRemainingDays(endDate)}일 남음</p>
                                         <Button variant="success" size="sm" onClick={handleSubmitVoteStatus}>제출</Button>

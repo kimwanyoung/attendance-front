@@ -8,6 +8,7 @@ interface PostModel {
     author: { name: string };
     createdAt: string;
     endDate: string;
+    memberCount: number;
 }
 
 interface PostModalProps {
@@ -26,7 +27,8 @@ interface DetailPostProps extends Pick<PostModel,
     'author' |
     'id' |
     'createdAt' |
-    'endDate'
+    'endDate' |
+    'memberCount'
 > {
 }
 

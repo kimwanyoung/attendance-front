@@ -10,7 +10,7 @@ const CustomProgressBar:React.FC<ProgressBarType> = ({now, max, label, voteStatu
                 <FaCheckCircle className="m-2" size={15} color="#198754"/>
                 <ProgressBarLabel>{label}</ProgressBarLabel>
             </div>
-            <Progress width={(now/max)*100} />
+            <Progress width={now && max && (now/max)*100} />
             <PersonCount>{now}</PersonCount>
         </ProgressBarContainer>
     )

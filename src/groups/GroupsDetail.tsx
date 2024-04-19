@@ -2,7 +2,7 @@ import ListGroup from "react-bootstrap/esm/ListGroup";
 import {Button, Container} from "react-bootstrap";
 import PostCard, {PostCardProps} from "../commons/components/PostCard";
 import {useCallback, useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import {HOST} from "../const/global.const";
 import axios from "axios";
 import {ManageToken} from "../utils/manageToken";
@@ -25,13 +25,13 @@ const mockNotices: NoticeTitleProps[] = [
 ]
 
 const GroupsDetail = () => {
+    const location = useLocation();
     const [posts, setPosts] = useState<PostCardProps[]>([]);
     const param = useParams();
     const [show, setShow] = useState(false);
     const handleModalOpen = () => {
         setShow(prevState => !prevState);
     };
-
     const findAllPostsByGroupId = useCallback(async () => {
         const groupId = Number(param.id);
         const response = await axios.get(`${HOST}/post/${groupId}`, {
@@ -54,7 +54,7 @@ const GroupsDetail = () => {
     useEffect(() => {
         getAllPosts().catch((error) => {
             console.error(error);
-        });;
+        });
     }, [getAllPosts]);
 
     return (
@@ -73,7 +73,7 @@ const GroupsDetail = () => {
                 <Container>
                     {posts.map(post => {
                         return <PostCard groupId={Number(param.id)} id={post.id} key={post.id} title={post.title} contents={post.contents}
-                                         startData={post.startData} endDate={post.endDate} author={post.author}/>
+                                         startData={post.startData} endDate={post.endDate} author={post.author} memberCount={location.state}/>
                     })}
                     <CreatePostModal show={show} onHide={handleModalOpen}/>
                 </Container>

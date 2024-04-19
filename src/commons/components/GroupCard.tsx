@@ -6,7 +6,9 @@ import {useNavigate} from "react-router-dom";
 const GroupCard:React.FC<GroupProps> = ({id, title, description, memberCount}) => {
     const navigate = useNavigate();
     const handleCardClick = () => {
-        navigate(`/groups/${id}`);
+        navigate(`/groups/${id}`, {
+            state: memberCount,
+        });
     }
 
     return (
