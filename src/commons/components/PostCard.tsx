@@ -10,16 +10,13 @@ export interface PostCardProps {
     startData: Date;
     endDate: Date;
     author: { name: string };
-    memberCount: number;
 }
 
-const PostCard: React.FC<PostCardProps> = ({groupId, id, title, contents, startData, endDate, author, memberCount}) => {
+const PostCard: React.FC<PostCardProps> = ({groupId, id, title, contents, startData, endDate, author}) => {
     const navigate = useNavigate();
 
     const handleNavigate = () => {
-        navigate(`/groups/${groupId}/posts/${id}`, {
-            state: memberCount,
-        });
+        navigate(`/groups/${groupId}/posts/${id}`);
     }
     return (
         <Card key={id} className="mt-2" style={{minWidth: "100%"}} border="success" onClick={handleNavigate}>

@@ -25,7 +25,6 @@ const mockNotices: NoticeTitleProps[] = [
 ]
 
 const GroupsDetail = () => {
-    const location = useLocation();
     const [posts, setPosts] = useState<PostCardProps[]>([]);
     const param = useParams();
     const [show, setShow] = useState(false);
@@ -73,7 +72,7 @@ const GroupsDetail = () => {
                 <Container>
                     {posts.map(post => {
                         return <PostCard groupId={Number(param.id)} id={post.id} key={post.id} title={post.title} contents={post.contents}
-                                         startData={post.startData} endDate={post.endDate} author={post.author} memberCount={location.state}/>
+                                         startData={post.startData} endDate={post.endDate} author={post.author}/>
                     })}
                     <CreatePostModal show={show} onHide={handleModalOpen}/>
                 </Container>

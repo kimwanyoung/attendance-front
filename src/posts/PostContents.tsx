@@ -20,7 +20,6 @@ const PostContents: React.FC<DetailPostProps> = (
         location,
         createdAt,
         endDate,
-        memberCount,
     }
 ) => {
     const navigate = useNavigate();
@@ -55,7 +54,7 @@ const PostContents: React.FC<DetailPostProps> = (
             voteStatus,
         }, {
             headers: {
-                Authorization:`Bearer ${localStorage.getItem('accessToken')}`
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         })
         return response.data;
@@ -84,41 +83,45 @@ const PostContents: React.FC<DetailPostProps> = (
     }
 
     return (
-        <div className="container mt-4 d-flex align-items-center justify-content-center flex-column">
-            <div className="row">
-                <div>
-                    <article>
-                        <header className="mb-4">
-                            <h1 className="fw-bolder mb-1">{title}</h1>
-                            <div className="text-muted fst-italic mt-1">생성일 : {createdAt.split('T')[0]}
+        <div className="container mt-4">
+            <article>
+                <header className="mb-4">
+                    <h1 className="fw-bolder mb-1">{title}</h1>
+                    <div className="text-muted fst-italic mt-1">생성일 : {createdAt.split('T')[0]}
+                    </div>
+                    <div className="text-muted fst-italic mt-1">생성자 : {author.name}
+                    </div>
+                    <div className="text-muted fst-italic mt-1">약속 날짜 : {eventDate.split('T')[0]}
+                    </div>
+                </header>
+                <figure className="mb-1">
+                    <KakaoMap location={location}/>
+                </figure>
+                <section className="mb-1">
+                    <p className="mb-4 text-muted">{location}</p>
+                    <p className="fs-5 mb-4">{contents}</p>
+                </section>
+                <section className="mb-5">
+                    <Card className="mt-2">
+                        <Card.Body>
+                            <CustomProgressBar max={votesData?.allVotes.length}
+                                               now={votesData && calculateVoteCountByType(VoteStatus.PARTICIPATED)}
+                                               label="참석" name={VoteStatus.PARTICIPATED}
+                                               onClick={() => handleVoteStatus(VoteStatus.PARTICIPATED)}
+                                               voteStatus={voteStatus}/>
+                            <CustomProgressBar max={votesData?.allVotes.length}
+                                               now={votesData && calculateVoteCountByType(VoteStatus.NOT_PARTICIPATED)}
+                                               label="불참" name={VoteStatus.NOT_PARTICIPATED}
+                                               onClick={() => handleVoteStatus(VoteStatus.NOT_PARTICIPATED)}
+                                               voteStatus={voteStatus}/>
+                            <div className="d-flex align-items-center justify-content-between">
+                                <p className="text-muted m-0">투표 마감 : {getRemainingDays(endDate)}일 남음</p>
+                                <Button variant="success" size="sm" onClick={handleSubmitVoteStatus}>제출</Button>
                             </div>
-                            <div className="text-muted fst-italic mt-1">생성자 : {author.name}
-                            </div>
-                            <div className="text-muted fst-italic mt-1">약속 날짜 : {eventDate.split('T')[0]}
-                            </div>
-                        </header>
-                        <figure className="mb-1">
-                            <KakaoMap location={location}/>
-                        </figure>
-                        <section className="mb-1">
-                            <p className="mb-4 text-muted">{location}</p>
-                            <p className="fs-5 mb-4">{contents}</p>
-                        </section>
-                        <section className="mb-5">
-                            <Card className="mt-2">
-                                <Card.Body>
-                                    <CustomProgressBar max={votesData?.allVotes.length} now={votesData && calculateVoteCountByType(VoteStatus.PARTICIPATED)} label="참석" name={VoteStatus.PARTICIPATED} onClick={() => handleVoteStatus(VoteStatus.PARTICIPATED)} voteStatus={voteStatus}/>
-                                    <CustomProgressBar max={votesData?.allVotes.length} now={votesData && calculateVoteCountByType(VoteStatus.NOT_PARTICIPATED)} label="불참" name={VoteStatus.NOT_PARTICIPATED} onClick={() => handleVoteStatus(VoteStatus.NOT_PARTICIPATED)} voteStatus={voteStatus}/>
-                                    <div className="d-flex align-items-center justify-content-between">
-                                        <p className="text-muted m-0">투표 마감 : {getRemainingDays(endDate)}일 남음</p>
-                                        <Button variant="success" size="sm" onClick={handleSubmitVoteStatus}>제출</Button>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                        </section>
-                    </article>
-                </div>
-            </div>
+                        </Card.Body>
+                    </Card>
+                </section>
+            </article>
         </div>
     )
 }

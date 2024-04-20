@@ -2,20 +2,15 @@ import React, {useCallback, useEffect, useState} from "react";
 import {Container} from "react-bootstrap";
 import axios from "axios";
 import {HOST} from "../const/global.const";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 import {PostModel} from "./types/PostTypes";
 import {ManageToken} from "../utils/manageToken";
 import PostContents from "./PostContents";
-import {VoteInPostType} from "./types/Vote.type";
 
 const PostDetail = () => {
     const navigate = useNavigate();
-    const location = useLocation();
     const {groupId, postId} = useParams();
     const [postData, setPostData] = useState<PostModel>();
-
-    console.log(postData);
-    console.log(location.state);
 
     const findPost = useCallback(async () => {
         const response = await axios.get(`${HOST}/group/${groupId}/post/${postId}`, {
@@ -47,7 +42,7 @@ const PostDetail = () => {
             {postData &&
                 <PostContents key={postData.id} id={postData.id} contents={postData.contents} author={postData.author}
                               title={postData.title} createdAt={postData.createdAt} eventDate={postData.eventDate}
-                              location={postData.location} endDate={postData.endDate} memberCount={location.state}/>}
+                              location={postData.location} endDate={postData.endDate}/>}
         </Container>
     )
 }
