@@ -1,8 +1,25 @@
 import {Container} from "react-bootstrap";
 import React from "react";
-import {UserModel} from "../types/user.type";
+import {AvatarType} from "../types/user.type";
+import {ApprovalEnum} from "../types/approval.enum";
+import axios from "axios";
+import {HOST} from "../const/global.const";
 
-const Avatar: React.FC<UserModel> = ({name, gender, email, phone}) => {
+const Avatar: React.FC<AvatarType> = ({id, userId, groupId, name, gender, email, phone, onClick}) => {
+    const handleClickButton = async (type: ApprovalEnum) => {
+        const response = await axios.post(`${HOST}/membership/approval`, {
+            userId,
+            groupId,
+            status: type,
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+        onClick(id);
+        return response.data;
+    }
+
     return (
         <Container>
             <div className="container py-2">
@@ -18,8 +35,8 @@ const Avatar: React.FC<UserModel> = ({name, gender, email, phone}) => {
                                     <p className="text-muted font-size-sm">{phone}</p>
                                 </div>
                                 <div className="d-flex flex-column">
-                                    <button className="btn btn-outline-success m-1">승인</button>
-                                    <button className="btn btn-outline-danger m-1">거절</button>
+                                    <button className="btn btn-outline-success m-1" onClick={() => handleClickButton(ApprovalEnum.APPROVED)}>승인</button>
+                                    <button className="btn btn-outline-danger m-1" onClick={() => handleClickButton(ApprovalEnum.REJECTED)}>거절</button>
                                 </div>
                             </div>
                         </div>
