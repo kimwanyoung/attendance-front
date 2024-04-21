@@ -14,17 +14,16 @@ const GlobalNavbar = () => {
 
     return (
         <>
-            <Navbar className="bg-body-tertiary shadow-sm" style={{
-                minWidth: "100%",
+            <Navbar className="d-flex justify-content-center align-items-center" style={{
                 fontWeight: 400,
                 fontStyle: "normal",
             }}>
-                <Container>
+                <Container className="w-100 d-flex justify-content-between align-items-center">
                     <Navbar.Brand href="/groups">
                         <img
                             src="/img/teamwork.png"
-                            width="30"
-                            height="30"
+                            width={30}
+                            height={30}
                             className="d-inline-block align-top"
                             alt="React Bootstrap logo"
                         />

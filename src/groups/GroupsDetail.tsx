@@ -58,14 +58,14 @@ const GroupsDetail = () => {
 
     return (
         <>
+            {/*<ListGroup variant='flush'>*/}
+            {/*    <ListGroup.Item className="fw-bold" variant="success">공지사항</ListGroup.Item>*/}
+            {/*    {mockNotices.map((notice) => (*/}
+            {/*        <NoticeTitle key={notice.orderNumber} orderNumber={notice.orderNumber} title={notice.title} />*/}
+            {/*    ))}*/}
+            {/*</ListGroup>*/}
             <ListGroup variant='flush'>
-                <ListGroup.Item className="fw-bold" variant="success">공지사항</ListGroup.Item>
-                {mockNotices.map((notice) => (
-                    <NoticeTitle key={notice.orderNumber} orderNumber={notice.orderNumber} title={notice.title} />
-                ))}
-            </ListGroup>
-            <ListGroup variant='flush'>
-                <ListGroup.Item className="fw-semibold d-flex align-items-center justify-content-between" variant="success">
+                <ListGroup.Item className="container w-100 fw-semibold d-flex align-items-center justify-content-between" variant="success">
                     일정 목록
                     <Button variant="success" size="sm" onClick={handleModalOpen}>일정 생성</Button>
                 </ListGroup.Item>
