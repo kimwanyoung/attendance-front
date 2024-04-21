@@ -8,6 +8,7 @@ import GlobalNavbar from "./commons/components/GlobalNavBar";
 import GroupsDetail from "./groups/GroupsDetail";
 import PostDetail from "./posts/PostDetail";
 import useKakaoLoader from "./utils/kakaoMaps/kakaoMaps";
+import GroupApproval from "./approval/GroupApproval";
 
 function App() {
     useKakaoLoader();
@@ -20,6 +21,7 @@ function App() {
                 <Route path={"/groups"} element={<Groups/>}/>
                 <Route path={"/groups/:id"} element={<GroupsDetail/>}/>
                 <Route path={"/groups/:groupId/posts/:postId"} element={<PostDetail/>}/>
+                <Route path={"/groups/:groupId/approval"} element={<GroupApproval />} />
             </Routes>
         </BrowserRouter>
     );

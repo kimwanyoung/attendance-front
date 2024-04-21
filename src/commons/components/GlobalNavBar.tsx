@@ -31,7 +31,7 @@ const GlobalNavbar = () => {
                         Attendance
                     </Navbar.Brand>
                     { location.pathname === '/groups' &&
-                        <Button variant="success" onClick={handleShow}>그룹생성</Button>}
+                        <Button variant="success" onClick={handleShow} size="sm">그룹생성</Button>}
                     {
                         isGroupPage &&
                         <CustomDropdownButton />
