@@ -7,6 +7,7 @@ import debounce from "lodash/debounce";
 import {HOST} from "../../const/global.const";
 import {ManageToken} from "../../utils/manageToken";
 import {GroupListType} from "../type/group-list.type";
+import CommonModal from "./CommonModal";
 
 const SearchGroupModal: React.FC<ModalProps> = (props) => {
     const [searchGroupInput, setSearchGroupInput] = useState<SearchGroupType>({
@@ -30,10 +31,12 @@ const SearchGroupModal: React.FC<ModalProps> = (props) => {
     const validatePostApplyGroup = async (event: MouseEvent<HTMLButtonElement>) => {
         try {
             await postApplyGroup(event);
+            props.onHide && props.onHide();
             setSuccessModalOpen(prevState => !prevState);
         } catch (error) {
             await ManageToken.rotateToken();
             await postApplyGroup(event);
+            props.onHide && props.onHide();
             setSuccessModalOpen(prevState => !prevState);
         }
     }
@@ -70,9 +73,14 @@ const SearchGroupModal: React.FC<ModalProps> = (props) => {
         await callBackDebouncedSearch({...searchGroupInput, [name]: value});
     }, [callBackDebouncedSearch, searchGroupInput])
 
+    const commonModalProps = {
+        onHide: () => setSuccessModalOpen(prevState => !prevState),
+        show: successModalOpen,
+    }
+
     return (
         <>
-            <Modal {...props} centered>
+            <Modal {...props} centered tabIndex="-1" className="my-backdrop">
                 <Modal.Header closeButton>
                     <Modal.Title>그룹 검색</Modal.Title>
                 </Modal.Header>
@@ -121,12 +129,7 @@ const SearchGroupModal: React.FC<ModalProps> = (props) => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <Modal centered show={successModalOpen} onHide={() => setSuccessModalOpen(prevState => !prevState)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>가입 신청 완료</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>해당 그룹에 가입 신청이 완료되었습니다!</Modal.Body>
-            </Modal>
+            <CommonModal props={{...commonModalProps}} title="가입 신청 완료" body="해당 그룹에 가입 신청이 완료되었습니다!" />
         </>
     )
 }

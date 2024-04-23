@@ -22,7 +22,6 @@ const GroupApproval = () => {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         });
-        console.log(response.data);
         return response.data;
     }, [params.groupId])
 
