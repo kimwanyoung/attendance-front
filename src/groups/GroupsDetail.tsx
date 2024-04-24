@@ -8,21 +8,7 @@ import axios from "axios";
 import {ManageToken} from "../utils/manageToken";
 import CreatePostModal from "../posts/CreatePostModal";
 import NoticeTitle, {NoticeTitleProps} from "../notice/NoticeTitle";
-
-const mockNotices: NoticeTitleProps[] = [
-    {
-        orderNumber: 1,
-        title: '중요 공지사항 남깁니다.',
-    },
-    {
-        orderNumber: 2,
-        title: '이번주 경기 일정.',
-    },{
-        orderNumber: 3,
-        title: '부상자 명단.',
-    },
-
-]
+import {calculateTimeDifference} from "../utils/convertDate";
 
 const GroupsDetail = () => {
     const [posts, setPosts] = useState<PostCardProps[]>([]);
@@ -38,6 +24,7 @@ const GroupsDetail = () => {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         });
+        console.log(response.data);
         return response.data;
     }, [param.id]);
 
@@ -56,28 +43,23 @@ const GroupsDetail = () => {
         });
     }, [getAllPosts]);
 
+
     return (
-        <>
-            {/*<ListGroup variant='flush'>*/}
-            {/*    <ListGroup.Item className="fw-bold" variant="success">공지사항</ListGroup.Item>*/}
-            {/*    {mockNotices.map((notice) => (*/}
-            {/*        <NoticeTitle key={notice.orderNumber} orderNumber={notice.orderNumber} title={notice.title} />*/}
-            {/*    ))}*/}
-            {/*</ListGroup>*/}
-            <ListGroup variant='flush'>
-                <ListGroup.Item className="container w-100 fw-semibold d-flex align-items-center justify-content-between" variant="success">
-                    일정 목록
-                    <Button variant="success" size="sm" onClick={handleModalOpen}>일정 생성</Button>
-                </ListGroup.Item>
-                <Container>
-                    {posts.map(post => {
-                        return <PostCard groupId={Number(param.id)} id={post.id} key={post.id} title={post.title} contents={post.contents}
-                                         startData={post.startData} endDate={post.endDate} author={post.author}/>
-                    })}
-                    <CreatePostModal show={show} onHide={handleModalOpen}/>
-                </Container>
-            </ListGroup>
-        </>
+        <ListGroup variant='flush'>
+            <ListGroup.Item className="container w-100 fw-semibold d-flex align-items-center justify-content-between"
+                            variant="success">
+                일정 목록
+                <Button variant="success" size="sm" onClick={handleModalOpen}>일정 생성</Button>
+            </ListGroup.Item>
+            <Container>
+                {posts.map(post => {
+                    return <PostCard groupId={Number(param.id)} id={post.id} key={post.id} title={post.title}
+                                     contents={post.contents}
+                                     createdAt={post.createdAt} endDate={post.endDate} author={post.author} timeDifference={calculateTimeDifference(new Date(post.createdAt))}/>
+                })}
+                <CreatePostModal show={show} onHide={handleModalOpen}/>
+            </Container>
+        </ListGroup>
     );
 }
 

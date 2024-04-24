@@ -7,12 +7,23 @@ export interface PostCardProps {
     id: number;
     title: string;
     contents: string;
-    startData: Date;
+    createdAt: Date;
     endDate: Date;
+    timeDifference: string;
     author: { name: string };
 }
 
-const PostCard: React.FC<PostCardProps> = ({groupId, id, title, contents, startData, endDate, author}) => {
+const PostCard: React.FC<PostCardProps> = (
+    {
+        groupId,
+        id,
+        title,
+        contents,
+        createdAt,
+        endDate,
+        author,
+        timeDifference
+    }) => {
     const navigate = useNavigate();
 
     const handleNavigate = () => {
@@ -20,14 +31,17 @@ const PostCard: React.FC<PostCardProps> = ({groupId, id, title, contents, startD
     }
     return (
         <Card key={id} className="mt-2" style={{minWidth: "100%"}} border="success" onClick={handleNavigate}>
-            {/*<Card.Img variant="top" src="https://placehold.co/100/png" height={100}/>*/}
             <Card.Body style={{fontSize: '80%'}}>
-                <Card.Title style={{fontSize: '130%'}}>{title}</Card.Title>
+                <Card.Title style={{fontSize: '130%'}}>[일정 제목] {title}</Card.Title>
                 <Card.Text>
-                    {contents}
+                    일정 내용: {contents}
                 </Card.Text>
             </Card.Body>
-            <Card.Footer className="text-muted" style={{fontSize: '70%'}}>생성자: {author.name}</Card.Footer>
+            <Card.Footer className="text-muted d-flex justify-content-between align-items-center"
+                         style={{fontSize: '70%'}}>
+                <p className="m-0">생성자: {author.name}</p>
+                <p className="m-0">생성일: {timeDifference}</p>
+            </Card.Footer>
         </Card>
     )
 }

@@ -80,7 +80,7 @@ const SearchGroupModal: React.FC<ModalProps> = (props) => {
 
     return (
         <>
-            <Modal {...props} centered tabIndex="-1" className="my-backdrop">
+            <Modal {...props} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>그룹 검색</Modal.Title>
                 </Modal.Header>
