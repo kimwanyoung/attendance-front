@@ -38,7 +38,7 @@ const PostDetail = () => {
         });
     }, [findPostValidation, navigate])
     return (
-        <Container>
+        <Container className="min-vh-100">
             {postData &&
                 <PostContents key={postData.id} id={postData.id} contents={postData.contents} author={postData.author}
                               title={postData.title} createdAt={postData.createdAt} eventDate={postData.eventDate}

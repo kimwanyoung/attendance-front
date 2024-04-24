@@ -32,9 +32,9 @@ const PostCard: React.FC<PostCardProps> = (
     return (
         <Card key={id} className="mt-2" style={{minWidth: "100%"}} border="success" onClick={handleNavigate}>
             <Card.Body style={{fontSize: '80%'}}>
-                <Card.Title style={{fontSize: '130%'}}>[일정 제목] {title}</Card.Title>
+                <Card.Title style={{fontSize: '130%'}}>{title}</Card.Title>
                 <Card.Text>
-                    일정 내용: {contents}
+                    {contents}
                 </Card.Text>
             </Card.Body>
             <Card.Footer className="text-muted d-flex justify-content-between align-items-center"

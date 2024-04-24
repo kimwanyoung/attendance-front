@@ -1,0 +1,15 @@
+.nav-underline .nav-link {
+    color: #198754;
+}
+
+.nav-link:focus {
+    color: #198754;
+}
+
+.nav-underline .nav-link.active {
+    color: #198754;
+}
+
+input::placeholder {
+    color: white;
+}

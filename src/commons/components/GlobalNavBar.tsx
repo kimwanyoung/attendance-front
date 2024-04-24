@@ -5,18 +5,24 @@ import CreateGroupModal from "../../groups/CreateGroupModal";
 import CustomDropdownButton from "./CustomDropdownButton";
 import SearchGroupModal from "./SearchGroupModal";
 import searchGroupModal from "./SearchGroupModal";
+import CreatePostModal from "../../posts/CreatePostModal";
 
 const GlobalNavbar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [createModalShow, setCreateModalShow] = useState(false);
     const [searchModalShow, setSearchModalShow] = useState(false);
+    const [createPostShow, setCreatePostShow] = useState(false);
 
     const handleClose = () => setCreateModalShow(false);
     const handleShow = () => setCreateModalShow(true);
 
     const handleSearchModal = () => {
         setSearchModalShow((prevState) => !prevState);
+    }
+
+    const handleCreatePostModalShow = () => {
+        setCreatePostShow(prevState => !prevState);
     }
     const isGroupPage = /^\/groups\/\d+$/.test(location.pathname);
 
@@ -26,7 +32,7 @@ const GlobalNavbar = () => {
 
     return (
         <>
-            <Navbar className="d-flex justify-content-center align-items-center" style={{
+            <Navbar className="d-flex justify-content-center align-items-center" variant="dark" style={{
                 fontWeight: 400,
                 fontStyle: "normal",
             }}>
@@ -55,12 +61,21 @@ const GlobalNavbar = () => {
                     }
                     {
                         isGroupPage &&
-                        <Button variant="success" onClick={() => handleNavigate('approval')} size="sm">가입 승인</Button>
+                        <DropdownButton
+                            align="end"
+                            variant="success"
+                            title='그룹관리'
+                            size="sm"
+                        >
+                            <Dropdown.Item onClick={() => handleNavigate('approval')}>가입 승인</Dropdown.Item>
+                            <Dropdown.Item onClick={handleCreatePostModalShow}>일정 생성</Dropdown.Item>
+                        </DropdownButton>
                     }
                 </Container>
             </Navbar>
             <CreateGroupModal show={createModalShow} onHide={handleClose}/>
             <SearchGroupModal show={searchModalShow} onHide={handleSearchModal}/>
+            <CreatePostModal show={createPostShow} onHide={handleCreatePostModalShow}/>
         </>
     );
 }

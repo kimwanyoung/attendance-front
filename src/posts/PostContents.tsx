@@ -84,7 +84,7 @@ const PostContents: React.FC<DetailPostProps> = (
 
     return (
         <div className="container mt-4">
-            <article>
+            <article className="text-white">
                 <header className="mb-4">
                     <h1 className="fw-bolder mb-1">{title}</h1>
                     <div className="text-muted fst-italic mt-1">생성일 : {createdAt.split('T')[0]}

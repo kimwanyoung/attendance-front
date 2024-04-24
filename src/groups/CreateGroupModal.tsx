@@ -51,19 +51,19 @@ const CreateGroupModal: React.FC<CreateGroupProps> = ({show, onHide}) => {
 
     return (
         <Modal show={show} onHide={onHide} animation={true} centered>
-            <Form onSubmit={handleCreateGroupBtn}>
-                <Modal.Header closeButton>
+            <Form onSubmit={handleCreateGroupBtn} className="bg-dark text-white">
+                <Modal.Header closeButton closeVariant="white">
                     <Modal.Title>그룹 생성</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                         <Form.Label>그룹명</Form.Label>
-                        <Form.Control type="text" name="title" value={createGroupData.title}
+                        <Form.Control className="bg-dark text-white" type="text" name="title" value={createGroupData.title}
                                       onChange={handleChangeCreateGroupInput} placeholder="원하시는 그룹명을 입력해주세요."/>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                         <Form.Label>그룹 설명</Form.Label>
-                        <Form.Control as="textarea" name="description" value={createGroupData.description}
+                        <Form.Control className="bg-dark text-white" as="textarea" name="description" value={createGroupData.description}
                                       onChange={handleChangeCreateGroupInput} rows={3}/>
                     </Form.Group>
                 </Modal.Body>

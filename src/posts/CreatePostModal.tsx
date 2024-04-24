@@ -3,7 +3,7 @@ import {Button, Modal} from "react-bootstrap";
 import React, {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
 import {HOST} from "../const/global.const";
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import {formatDate} from "../utils/convertDate";
 import {CreatePostProps, PostModalProps} from "./types/PostTypes";
 import {ManageToken} from "../utils/manageToken";
@@ -11,7 +11,7 @@ import AddressModal from "../commons/components/AddressModal";
 import {Address} from "react-daum-postcode";
 
 const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
-    const param = useParams();
+    const location = useLocation();
     const [addressShow, setAddressShow] = useState(false);
     const [createPostData, setCreatePostData] = useState<CreatePostProps>({
         title: '',
@@ -42,7 +42,8 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
     }
 
     const createPost = async () => {
-        return axios.post(`${HOST}/post/${param.id}`, createPostData, {
+        const splitedLocation = location.pathname.split("/");
+        return axios.post(`${HOST}/post/${splitedLocation[splitedLocation.length - 1]}`, createPostData, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
@@ -62,20 +63,25 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
 
     return (
         <Modal show={show} onHide={onHide} animation={true} centered>
-            <Form onSubmit={handleCreatePostBtn}>
-                <Modal.Header closeButton>
+            <Form onSubmit={handleCreatePostBtn} className="bg-dark text-white">
+                <Modal.Header closeButton closeVariant="white">
                     <Modal.Title>일정 생성</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group className="mb-3">
                         <Form.Label>일정명</Form.Label>
                         <Form.Control type="text" name="title" value={createPostData.title}
-                                      onChange={handleChangeCreatePostInput} placeholder="원하시는 일정명을 입력해주세요."/>
+                                      className="text-white bg-dark"
+                                      onChange={handleChangeCreatePostInput}
+                                      placeholder="원하시는 일정명을 입력해주세요."
+                        />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>일정 설명</Form.Label>
-                        <Form.Control as="textarea" name="contents" value={createPostData.contents}
-                                      onChange={handleChangeCreatePostInput} rows={3}/>
+                        <Form.Control
+                            className="text-white bg-dark"
+                            as="textarea" name="contents" value={createPostData.contents}
+                            onChange={handleChangeCreatePostInput} rows={3}/>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <div className="d-flex align-items-center justify-content-between mb-3">
@@ -83,17 +89,24 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
                             <Button variant="success" size="sm" onClick={handleAddressModal}>주소 검색</Button>
                         </div>
                         <AddressModal show={addressShow} onHide={handleAddressModal} handleAddress={handleAddress}/>
-                        <Form.Control type="text" disabled={true} name="location" value={createPostData.location}/>
+                        <Form.Control className="text-white bg-dark" type="text" disabled={true} name="location"
+                                      value={createPostData.location}/>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>날짜</Form.Label>
-                        <Form.Control type="DATE" name="eventDate" value={createPostData.eventDate}
-                                      onChange={handleChangeCreatePostInput}/>
+                        <Form.Control
+                            className="text-white bg-dark"
+                            type="DATE" name="eventDate" value={createPostData.eventDate}
+                            onChange={handleChangeCreatePostInput}
+                            style={{colorScheme: "dark"}}
+                        />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>투표 기간(일)</Form.Label>
-                        <Form.Control type="text" name="voteDuration" value={createPostData.voteDuration}
-                                      onChange={handleChangeCreatePostInput}/>
+                        <Form.Control
+                            className="text-white bg-dark"
+                            type="text" name="voteDuration" value={createPostData.voteDuration}
+                            onChange={handleChangeCreatePostInput}/>
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>

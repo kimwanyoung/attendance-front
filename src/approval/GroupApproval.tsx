@@ -40,7 +40,7 @@ const GroupApproval = () => {
         });
     }, [validateGetPendingList]);
     return (
-        <Container>
+        <Container className="min-vh-100">
             {pendingUsers?.map((pendingUser) =>
                 <Avatar
                     key={pendingUser.user.phone}

@@ -47,7 +47,7 @@ const Login = () => {
     }
 
     return (
-        <Container className="d-flex flex-column justify-content-center" style={{minHeight: "100vh"}}>
+        <Container className="d-flex flex-column justify-content-center text-white" style={{minHeight: "100vh"}}>
             <h3>로그인</h3>
             <Form style={{minWidth: "100%"}} onSubmit={onLogin}>
                 <InputForm title="이메일" name="email" value={login.email} inputType="email" onChange={handleChange}/>
