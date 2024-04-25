@@ -5,6 +5,7 @@ import {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
 import {HOST} from "../const/global.const";
 import {Link, useNavigate} from "react-router-dom";
+import CommonModal from "../commons/components/CommonModal";
 
 interface LoginProps {
     email: string;
@@ -17,6 +18,7 @@ const Login = () => {
         email: '',
         password: '',
     });
+    const [loginValidate, setLoginValidate] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -49,12 +51,21 @@ const Login = () => {
                 localStorage.setItem('refreshToken', refreshToken);
                 navigate('/groups');
             }
-        } catch (err) {
+        } catch (err: any) {
+            if(err.response.status === 400) {
+                setLoginValidate(true);
+            }
             console.error(err);
         }
     }
 
+    const validateLoginModalProps = {
+        onHide: () => setLoginValidate(prevState => !prevState),
+        show: loginValidate,
+    }
+
     return (
+        <>
         <Container className="d-flex flex-column justify-content-center text-white" style={{minHeight: "100vh"}}>
             <h3>로그인</h3>
             <Form style={{minWidth: "100%"}} noValidate validated={validate} onSubmit={onLogin}>
@@ -69,6 +80,8 @@ const Login = () => {
                 <Link className="text-decoration-none" to="/register">회원가입</Link>
             </div>
         </Container>
+            <CommonModal props={validateLoginModalProps} title="아이디, 비밀번호 에러" body="아미디 및 비밀번호를 확인해주세요." />
+        </>
     )
 }
 
