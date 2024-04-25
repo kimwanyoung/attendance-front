@@ -18,6 +18,7 @@ const SearchGroupModal: React.FC<ModalProps> = (props) => {
     });
     const [groupList, setGroupList] = useState<GroupListType[]>([]);
     const [successModalOpen, setSuccessModalOpen] = useState(false);
+    const [alreadyUserModalOpen, setAlreadyUserModalOpen] = useState(false);
 
     const postApplyGroup = async (event: MouseEvent<HTMLButtonElement>) => {
         const groupId = event.currentTarget.id;
@@ -35,12 +36,23 @@ const SearchGroupModal: React.FC<ModalProps> = (props) => {
             await postApplyGroup(event);
             props.onHide && props.onHide();
             setSuccessModalOpen(prevState => !prevState);
-        } catch (error) {
-            await ManageToken.rotateToken();
-            await postApplyGroup(event);
-            props.onHide && props.onHide();
-            setSuccessModalOpen(prevState => !prevState);
+        } catch (error: any) {
+            if(error.response.status === 401) {
+                await ManageToken.rotateToken();
+                await postApplyGroup(event);
+                props.onHide && props.onHide();
+                setSuccessModalOpen(prevState => !prevState);
+            }
+            if(error.response.status === 400) {
+                props.onHide && props.onHide();
+                setAlreadyUserModalOpen(prevState => !prevState);
+            }
         }
+        setSearchGroupInput({
+            groupCreatorName:"",
+            groupName:"",
+        });
+        setGroupList([]);
     }
 
     const getGroupsByName = async (value: SearchGroupType) => {
@@ -78,6 +90,11 @@ const SearchGroupModal: React.FC<ModalProps> = (props) => {
     const commonModalProps = {
         onHide: () => setSuccessModalOpen(prevState => !prevState),
         show: successModalOpen,
+    }
+
+    const alreadyModalProps = {
+        onHide: () => setAlreadyUserModalOpen(prevState => !prevState),
+        show: alreadyUserModalOpen,
     }
 
     return (
@@ -131,6 +148,7 @@ const SearchGroupModal: React.FC<ModalProps> = (props) => {
                 </Modal.Body>
             </Modal>
             <CommonModal props={{...commonModalProps}} title="가입 신청 완료" body="해당 그룹에 가입 신청이 완료되었습니다!"/>
+            <CommonModal props={{...alreadyModalProps}} title="가입 신청 에러" body="이미 가입된 그룹입니다!"/>
         </>
     )
 }

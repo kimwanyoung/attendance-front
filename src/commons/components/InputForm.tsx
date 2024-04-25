@@ -11,7 +11,7 @@ interface InputFormProps {
 
 const InputForm: React.FC<InputFormProps> = ({title,name, value, inputType, onChange}) => {
     return (
-        <Form.Group className="mb-1">
+        <Form.Group className="mb-3">
             <Form.Label htmlFor={`input${title + inputType}`}>{title}</Form.Label>
             <Form.Control
                 type={inputType}

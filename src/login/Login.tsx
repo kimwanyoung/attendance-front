@@ -52,7 +52,7 @@ const Login = () => {
             <Form style={{minWidth: "100%"}} onSubmit={onLogin}>
                 <InputForm title="이메일" name="email" value={login.email} inputType="email" onChange={handleChange}/>
                 <InputForm title="비밀번호" name="password" value={login.password} inputType="password" onChange={handleChange}/>
-                <div className="d-grid mt-2">
+                <div className="d-grid">
                     <Button variant="success" size="lg" type="submit">로그인</Button>
                 </div>
             </Form>
