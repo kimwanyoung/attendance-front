@@ -18,6 +18,7 @@ interface RegisterProps {
 
 const Register = () => {
     const genders = [Gender.MALE, Gender.FEMALE];
+    const [validated, setValidated] = useState(false);
     const [register, setRegister] = useState<RegisterProps>({
         email: '',
         password: '',
@@ -35,8 +36,16 @@ const Register = () => {
         }));
     }
 
+    console.log(validated);
+
     const onSubmit = async (event: FormEvent<HTMLFormElement> ) => {
+        const form = event.currentTarget;
         event.preventDefault();
+        if (!form.checkValidity()) {
+            event.stopPropagation();
+            setValidated(true);
+            return;
+        }
 
         try {
             const response = await axios.post(`${HOST}/auth/register`, {
@@ -57,12 +66,12 @@ const Register = () => {
     return (
         <Container className="d-flex flex-column justify-content-center text-white" style={{minHeight: "100vh"}}>
             <h3>회원가입</h3>
-            <Form style={{minWidth: "100%"}} onSubmit={onSubmit}>
-                <InputForm title="이메일" name="email" value={register.email} inputType="email" onChange={handleChange}/>
-                <InputForm title="비밀번호" name="password" value={register.password} inputType="password" onChange={handleChange}/>
-                <InputForm title="이름" name="name" value={register.name} inputType="text" onChange={handleChange}/>
+            <Form style={{minWidth: "100%"}} onSubmit={onSubmit} noValidate validated={validated}>
+                <InputForm required title="이메일" name="email" value={register.email} inputType="email" onChange={handleChange}/>
+                <InputForm required title="비밀번호" name="password" value={register.password} inputType="password" onChange={handleChange}/>
+                <InputForm required title="이름" name="name" value={register.name} inputType="text" onChange={handleChange}/>
                 <InputSelect title="성별" name="gender" value={register.gender}  options={genders} onChange={handleChange}/>
-                <InputForm title="전화번호" name="phone" value={register.phone} inputType="text" onChange={handleChange}/>
+                <InputForm required title="전화번호" name="phone" value={register.phone} inputType="text" onChange={handleChange}/>
                 <div className="d-grid mt-2">
                     <Button variant="success" size="lg" type="submit">회원가입</Button>
                 </div>

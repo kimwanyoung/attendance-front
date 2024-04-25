@@ -12,6 +12,7 @@ interface LoginProps {
 }
 
 const Login = () => {
+    const [validate, setValidate] = useState(false);
     const [login, setLogin] = useState<LoginProps>({
         email: '',
         password: '',
@@ -28,6 +29,13 @@ const Login = () => {
 
     const onLogin = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        const form = event.currentTarget;
+        if(!form.checkValidity()) {
+            event.stopPropagation();
+            setValidate(true);
+            return;
+        }
 
         try {
             const response = await axios.post(`${HOST}/auth/login`, {
@@ -49,9 +57,9 @@ const Login = () => {
     return (
         <Container className="d-flex flex-column justify-content-center text-white" style={{minHeight: "100vh"}}>
             <h3>로그인</h3>
-            <Form style={{minWidth: "100%"}} onSubmit={onLogin}>
-                <InputForm title="이메일" name="email" value={login.email} inputType="email" onChange={handleChange}/>
-                <InputForm title="비밀번호" name="password" value={login.password} inputType="password" onChange={handleChange}/>
+            <Form style={{minWidth: "100%"}} noValidate validated={validate} onSubmit={onLogin}>
+                <InputForm required title="이메일" name="email" value={login.email} inputType="email" onChange={handleChange}/>
+                <InputForm  required title="비밀번호" name="password" value={login.password} inputType="password" onChange={handleChange}/>
                 <div className="d-grid">
                     <Button variant="success" size="lg" type="submit">로그인</Button>
                 </div>
