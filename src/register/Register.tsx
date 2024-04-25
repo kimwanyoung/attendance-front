@@ -7,6 +7,7 @@ import {Gender} from "../types/gender.enum";
 import React, {ChangeEvent, FormEvent, useState} from "react";
 import axios from "axios";
 import {HOST} from "../const/global.const";
+import CommonModal from "../commons/components/CommonModal";
 
 interface RegisterProps {
     email: string;
@@ -26,6 +27,8 @@ const Register = () => {
         gender: Gender.MALE,
         phone: '',
     })
+    const [duplicateEmailModalOpen, setDuplicateEmailModalOpen] = useState(false);
+    const [duplicatePhoneModalOpen, setDuplicatePhoneModalOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -35,8 +38,6 @@ const Register = () => {
             [name]: value,
         }));
     }
-
-    console.log(validated);
 
     const onSubmit = async (event: FormEvent<HTMLFormElement> ) => {
         const form = event.currentTarget;
@@ -58,12 +59,30 @@ const Register = () => {
                 localStorage.setItem('refreshToken', refreshToken);
                 navigate('/groups');
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
+            if(err.response.status === 400) {
+                if(err.response.data.message.includes("존재하는 이메일입니다.")) {
+                    setDuplicateEmailModalOpen(true);
+                }
+                if(err.response.data.message.includes("존재하는 휴대전화입니다.")) {
+                    setDuplicatePhoneModalOpen(true);
+                }
+            }
         }
     }
 
+    const duplicateEmailModalProps = {
+        onHide: () => setDuplicateEmailModalOpen(prevState => !prevState),
+        show: duplicateEmailModalOpen,
+    }
+    const duplicatePhoneModalProps = {
+        onHide: () => setDuplicatePhoneModalOpen(prevState => !prevState),
+        show: duplicatePhoneModalOpen,
+    }
+
     return (
+        <>
         <Container className="d-flex flex-column justify-content-center text-white" style={{minHeight: "100vh"}}>
             <h3>회원가입</h3>
             <Form style={{minWidth: "100%"}} onSubmit={onSubmit} noValidate validated={validated}>
@@ -81,6 +100,9 @@ const Register = () => {
                 <Link className="text-decoration-none" to="/">로그인</Link>
             </div>
         </Container>
+            <CommonModal props={duplicateEmailModalProps} title="중복 에러" body="중복된 이메일입니다." />
+            <CommonModal props={duplicatePhoneModalProps} title="중복 에러" body="중복된 전화번호입니다." />
+        </>
     )
 }
 
