@@ -49,7 +49,7 @@ const GroupsDetail = () => {
                     <Nav.Link active={!isSchedule} onClick={() => setIsSchedule(false)}>공지</Nav.Link>
                 </Nav.Item>
             </Nav>
-            <Container>
+            <Container className="pb-3">
                 {isSchedule && posts.map(post => {
                     return <PostCard groupId={Number(param.id)} id={post.id} key={post.id} title={post.title}
                                      contents={post.contents}
