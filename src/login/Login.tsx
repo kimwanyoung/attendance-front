@@ -33,7 +33,7 @@ const Login = () => {
         event.preventDefault();
 
         const form = event.currentTarget;
-        if(!form.checkValidity()) {
+        if (!form.checkValidity()) {
             event.stopPropagation();
             setValidate(true);
             return;
@@ -44,15 +44,14 @@ const Login = () => {
                 email: login.email,
                 password: login.password,
             });
-            console.log(response);
-            if(response.status === 201) {
+            if (response.status === 201) {
                 const {accessToken, refreshToken} = response.data;
                 localStorage.setItem('accessToken', accessToken);
                 localStorage.setItem('refreshToken', refreshToken);
                 navigate('/groups');
             }
         } catch (err: any) {
-            if(err.response.status === 400) {
+            if (err.response.status === 400 || err.response.status === 401) {
                 setLoginValidate(true);
             }
             console.error(err);
@@ -66,21 +65,23 @@ const Login = () => {
 
     return (
         <>
-        <Container className="d-flex flex-column justify-content-center text-white" style={{minHeight: "100vh"}}>
-            <h3>로그인</h3>
-            <Form style={{minWidth: "100%"}} noValidate validated={validate} onSubmit={onLogin}>
-                <InputForm required title="이메일" name="email" value={login.email} inputType="email" onChange={handleChange}/>
-                <InputForm  required title="비밀번호" name="password" value={login.password} inputType="password" onChange={handleChange}/>
-                <div className="d-grid">
-                    <Button variant="success" size="lg" type="submit">로그인</Button>
+            <Container className="d-flex flex-column justify-content-center text-white" style={{minHeight: "100vh"}}>
+                <h3>로그인</h3>
+                <Form style={{minWidth: "100%"}} noValidate validated={validate} onSubmit={onLogin}>
+                    <InputForm required title="이메일" name="email" value={login.email} inputType="email"
+                               onChange={handleChange}/>
+                    <InputForm required title="비밀번호" name="password" value={login.password} inputType="password"
+                               onChange={handleChange}/>
+                    <div className="d-grid">
+                        <Button variant="success" size="lg" type="submit">로그인</Button>
+                    </div>
+                </Form>
+                <div className="d-flex justify-content-end">
+                    <p className="me-1">아직 회원이 아니신가요?</p>
+                    <Link className="text-decoration-none" to="/register">회원가입</Link>
                 </div>
-            </Form>
-            <div className="d-flex justify-content-end">
-                <p className="me-1">아직 회원이 아니신가요?</p>
-                <Link className="text-decoration-none" to="/register">회원가입</Link>
-            </div>
-        </Container>
-            <CommonModal props={validateLoginModalProps} title="아이디, 비밀번호 에러" body="아미디 및 비밀번호를 확인해주세요." />
+            </Container>
+            <CommonModal props={validateLoginModalProps} title="아이디, 비밀번호 에러" body="아미디 및 비밀번호를 확인해주세요."/>
         </>
     )
 }
