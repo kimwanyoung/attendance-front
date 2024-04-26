@@ -91,7 +91,7 @@ const PostContents: React.FC<DetailPostProps> = (
                     </div>
                     <div className="text-muted fst-italic mt-1">생성자 : {author.name}
                     </div>
-                    <div className="text-muted fst-italic mt-1">약속 날짜 : {eventDate.split('T')[0]}
+                    <div className="text-muted fst-italic mt-1">모임 날짜 : {eventDate.split('T')[0]}
                     </div>
                 </header>
                 <figure className="mb-1">
@@ -102,7 +102,7 @@ const PostContents: React.FC<DetailPostProps> = (
                     <p className="fs-5 mb-4">{contents}</p>
                 </section>
                 <section className="mb-5">
-                    <Card className="mt-2">
+                    <Card className="mt-2 position-relative">
                         <Card.Body>
                             <CustomProgressBar max={votesData?.allVotes.length}
                                                now={votesData && calculateVoteCountByType(VoteStatus.PARTICIPATED)}
@@ -115,10 +115,18 @@ const PostContents: React.FC<DetailPostProps> = (
                                                onClick={() => handleVoteStatus(VoteStatus.NOT_PARTICIPATED)}
                                                voteStatus={voteStatus}/>
                             <div className="d-flex align-items-center justify-content-between">
-                                <p className="text-muted m-0">투표 마감 : {getRemainingDays(endDate)}일 남음</p>
+                                <p className="text-muted m-0">투표 마감일 : {getRemainingDays(endDate) > 0 ? `${getRemainingDays(endDate)}일 남음` : "마감"}</p>
                                 <Button variant="success" size="sm" onClick={handleSubmitVoteStatus}>제출</Button>
                             </div>
                         </Card.Body>
+                        {
+                            getRemainingDays(endDate) < 0 &&
+                            <Card className="mt-2 z-1 position-absolute w-100 h-100 opacity-50 border-0">
+                                <Card.Body className="d-flex align-items-center justify-content-center">
+                                    <p className="fs-5 mb-4">투표 마감</p>
+                                </Card.Body>
+                            </Card>
+                        }
                     </Card>
                 </section>
             </article>

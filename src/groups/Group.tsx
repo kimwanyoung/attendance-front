@@ -21,7 +21,6 @@ const Groups = () => {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`,
             }
         })
-        console.log(response.data)
         return response.data;
     }, []);
 
@@ -31,7 +30,6 @@ const Groups = () => {
         } catch (err) {
             await ManageToken.rotateToken();
             setGroups(await getGroups());
-            window.location.reload();
         }
     }, [getGroups]);
 
