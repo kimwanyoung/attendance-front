@@ -6,6 +6,7 @@ import CustomDropdownButton from "./CustomDropdownButton";
 import SearchGroupModal from "./SearchGroupModal";
 import searchGroupModal from "./SearchGroupModal";
 import CreatePostModal from "../../posts/CreatePostModal";
+import CreateNoticeModal from "../../notice/CreateNoticeModal";
 
 const GlobalNavbar = () => {
     const location = useLocation();
@@ -13,6 +14,7 @@ const GlobalNavbar = () => {
     const [createModalShow, setCreateModalShow] = useState(false);
     const [searchModalShow, setSearchModalShow] = useState(false);
     const [createPostShow, setCreatePostShow] = useState(false);
+    const [createNoticeModalShow, setCreateNoticeModalShow] = useState(false);
 
     const handleClose = () => setCreateModalShow(false);
     const handleShow = () => setCreateModalShow(true);
@@ -69,6 +71,7 @@ const GlobalNavbar = () => {
                         >
                             <Dropdown.Item onClick={() => handleNavigate('approval')}>가입 승인</Dropdown.Item>
                             <Dropdown.Item onClick={handleCreatePostModalShow}>일정 생성</Dropdown.Item>
+                            <Dropdown.Item onClick={() => setCreateNoticeModalShow(prevState => !prevState)}>공지 생성</Dropdown.Item>
                         </DropdownButton>
                     }
                 </Container>
@@ -76,6 +79,7 @@ const GlobalNavbar = () => {
             <CreateGroupModal show={createModalShow} onHide={handleClose}/>
             <SearchGroupModal show={searchModalShow} onHide={handleSearchModal}/>
             <CreatePostModal show={createPostShow} onHide={handleCreatePostModalShow}/>
+            <CreateNoticeModal show={createNoticeModalShow} onHide={() => setCreateNoticeModalShow(prevState => !prevState)}/>
         </>
     );
 }
