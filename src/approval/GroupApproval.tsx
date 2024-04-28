@@ -32,7 +32,7 @@ const GroupApproval = () => {
         try {
             setPendingUsers(await getPendingUserList());
         } catch (error: any) {
-            if (error.response.status === 401 && error.response.data.message.includes("그룹 생성자만")) {
+            if (error.response.status === 401 && error.response.data.message.includes("권한")) {
                 setUnAuthorizationModal(true);
             }
             if (error.response.status === 401 && error.response.data.message.includes("토큰")) {

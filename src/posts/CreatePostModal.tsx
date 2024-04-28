@@ -66,7 +66,7 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
         try {
             await createPost();
         } catch (error: any) {
-            if (error.response.status === 401 && error.response.data.message.includes("글 작성 권한이")) {
+            if (error.response.status === 401 && error.response.data.message.includes("권한이")) {
                 setUnAuthorizationModal(true);
             }
             if (error.response.status === 401 && error.response.data.message.includes("토큰")) {
