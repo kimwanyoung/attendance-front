@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import {Button, Modal} from "react-bootstrap";
-import React, {ChangeEvent, FormEvent, useState} from "react";
+import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {HOST} from "../const/global.const";
 import {useLocation, useParams} from "react-router-dom";
@@ -16,6 +16,7 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
     const [addressShow, setAddressShow] = useState(false);
     const [formValidate, setFormValidate] = useState(false);
     const [unAuthorizationModal, setUnAuthorizationModal] = useState(false);
+    const [requestStatus, setRequestStatus] = useState<"error" | "success" | "idle">("idle");
     const [createPostData, setCreatePostData] = useState<CreatePostProps>({
         title: '',
         contents: '',
@@ -65,15 +66,18 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
 
         try {
             await createPost();
+            setRequestStatus("success");
         } catch (error: any) {
             if (error.response.status === 401 && error.response.data.message.includes("권한이")) {
                 setUnAuthorizationModal(true);
+                setRequestStatus("error");
             }
             if (error.response.status === 401 && error.response.data.message.includes("토큰")) {
                 await ManageToken.rotateToken();
                 await createPost();
             }
         }
+
         onHide();
     }
 
@@ -81,6 +85,12 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
         onHide: () => setUnAuthorizationModal(prevState => !prevState),
         show: unAuthorizationModal
     }
+
+    useEffect(() => {
+        if (!unAuthorizationModal && requestStatus === "success") {
+            window.location.reload();
+        }
+    }, [unAuthorizationModal, requestStatus]);
 
     return (
         <>
