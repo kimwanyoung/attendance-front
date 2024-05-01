@@ -6,13 +6,15 @@ import {useParams} from "react-router-dom";
 import {HOST} from "../const/global.const";
 import axios from "axios";
 import {ManageToken} from "../utils/manageToken";
-import CreatePostModal from "../posts/CreatePostModal";
 import {calculateTimeDifference} from "../utils/convertDate";
 import "../commons/components/custom.css";
+import NoticeCard from "../notice/NoticeCard";
+import {NoticeCardType} from "../types/notice-card.type";
 
 const GroupsDetail = () => {
     const param = useParams();
     const [posts, setPosts] = useState<PostCardProps[]>([]);
+    const [notices, setNotices] = useState<NoticeCardType[]>([]);
     const [groupTitle, setGroupTitle] = useState("");
     const [isSchedule, setIsSchedule] = useState(true);
     const findAllPostsByGroupId = useCallback(async () => {
@@ -25,24 +27,39 @@ const GroupsDetail = () => {
         return response.data;
     }, [param.id]);
 
-    const getAllPosts = useCallback(async () => {
+    const findAllNoticeByGroupId = useCallback(async () => {
+        const groupId = Number(param.id);
+        const response = await axios.get<NoticeCardType[]>(`${HOST}/group/${groupId}/notice`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+
+        return response.data;
+    }, [param.id])
+
+    const getAllPostsAndNotice = useCallback(async () => {
         try {
-            const responseData = await findAllPostsByGroupId();
-            setPosts(responseData.posts);
-            setGroupTitle(responseData.group.title);
+            const responsePostData = await findAllPostsByGroupId();
+            const responseNoticeData = await findAllNoticeByGroupId();
+            setPosts(responsePostData.posts);
+            setNotices(responseNoticeData);
+            setGroupTitle(responsePostData.group.title);
         } catch (err) {
             await ManageToken.rotateToken();
-            const responseData = await findAllPostsByGroupId();
-            setPosts(responseData.posts);
-            setGroupTitle(responseData.group.title);
+            const responsePostData = await findAllPostsByGroupId();
+            const responseNoticeData = await findAllNoticeByGroupId();
+            setPosts(responsePostData.posts);
+            setNotices(responseNoticeData);
+            setGroupTitle(responsePostData.group.title);
         }
-    }, [findAllPostsByGroupId]);
+    }, [findAllPostsByGroupId, findAllNoticeByGroupId]);
 
     useEffect(() => {
-        getAllPosts().catch((error) => {
+        getAllPostsAndNotice().catch((error) => {
             console.error(error);
         });
-    }, [getAllPosts]);
+    }, [getAllPostsAndNotice]);
 
     return (
         <ListGroup variant='flush' className="min-vh-100">
@@ -63,7 +80,9 @@ const GroupsDetail = () => {
                                      createdAt={post.createdAt} endDate={post.endDate} author={post.author}
                                      timeDifference={calculateTimeDifference(new Date(post.createdAt))}/>
                 })}
-                {!isSchedule && <p className="text-white">ss</p>}
+                {!isSchedule && notices.map(notice => {
+                    return <NoticeCard key={notice.id} title={notice.title} contents={notice.contents} createdAt={notice.createdAt} updatedAt={notice.updatedAt}/>
+                })}
             </Container>
         </ListGroup>
     );
