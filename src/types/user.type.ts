@@ -1,7 +1,7 @@
 import {Gender} from "./gender.enum";
 
 interface UserModel {
-    userId: number;
+    id: number;
     email: string;
     gender: Gender;
     name: string;
@@ -10,6 +10,7 @@ interface UserModel {
 
 interface AvatarType extends UserModel {
     id: number;
+    userId:number;
     groupId: number;
     onClick: (id: number) => void;
 }

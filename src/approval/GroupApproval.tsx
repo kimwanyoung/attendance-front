@@ -19,6 +19,8 @@ const GroupApproval = () => {
         setPendingUsers(removedList);
     }
 
+    console.log(pendingUsers);
+
     const getPendingUserList = useCallback(async () => {
         const response = await axios.get<PendingUserType[]>(`${HOST}/group/${params.groupId}/membership/pending-list`, {
             headers: {
@@ -63,7 +65,7 @@ const GroupApproval = () => {
                         key={pendingUser.user.phone}
                         id={pendingUser.id}
                         groupId={Number(params.groupId)}
-                        userId={pendingUser.user.userId}
+                        userId={pendingUser.user.id}
                         name={pendingUser.user.name}
                         email={pendingUser.user.email}
                         gender={pendingUser.user.gender}
