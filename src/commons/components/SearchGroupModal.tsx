@@ -22,7 +22,7 @@ const SearchGroupModal: React.FC<ModalProps> = (props) => {
 
     const postApplyGroup = async (event: MouseEvent<HTMLButtonElement>) => {
         const groupId = event.currentTarget.id;
-        const response = await axios.post(`${HOST}/membership/apply/${groupId}`, {}, {
+        const response = await axios.post(`${HOST}/group/${groupId}/membership/apply`, {}, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             },

@@ -20,7 +20,7 @@ const GroupApproval = () => {
     }
 
     const getPendingUserList = useCallback(async () => {
-        const response = await axios.get<PendingUserType[]>(`${HOST}/membership/pendingList/${params.groupId}`, {
+        const response = await axios.get<PendingUserType[]>(`${HOST}/group/${params.groupId}/membership/pending-list`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }

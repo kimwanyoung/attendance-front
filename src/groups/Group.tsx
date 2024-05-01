@@ -21,7 +21,6 @@ const Groups = () => {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`,
             }
         })
-        console.log(response.data);
         return response.data;
     }, []);
 

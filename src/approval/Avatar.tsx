@@ -7,11 +7,7 @@ import { HOST } from "../const/global.const";
 
 const Avatar: React.FC<AvatarType> = ({ id, userId, groupId, name, gender, email, phone, onClick }) => {
     const handleClickButton = async (type: ApprovalEnum) => {
-        const response = await axios.post(`${HOST}/membership/approval`, {
-            userId,
-            groupId,
-            status: type,
-        }, {
+        const response = await axios.post(`${HOST}/group/${groupId}/membership/approval?userId=${userId}&status=${type}`, {}, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
