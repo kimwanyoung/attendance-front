@@ -47,7 +47,7 @@ const CreatePostModal: React.FC<PostModalProps> = ({show, onHide}) => {
 
     const createPost = async () => {
         const splitedLocation = location.pathname.split("/");
-        return await axios.post(`${HOST}/post/${splitedLocation[splitedLocation.length - 1]}`, createPostData, {
+        return await axios.post(`${HOST}/group/${splitedLocation[splitedLocation.length - 1]}/post`, createPostData, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }

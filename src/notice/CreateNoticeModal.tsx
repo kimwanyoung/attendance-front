@@ -29,7 +29,7 @@ const CreateNoticeModal:React.FC<ModalProps> = ({show, onHide}) => {
         const groupId = pathName[pathName.length - 1];
         try {
 
-            const response = await axios.post(`${HOST}/notice/${groupId}`, noticeData, {
+            const response = await axios.post(`${HOST}/group/${groupId}/notice`, noticeData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("accessToken")}`
                 }

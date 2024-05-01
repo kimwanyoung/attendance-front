@@ -28,13 +28,13 @@ const PostContents: React.FC<DetailPostProps> = (
     const [votesData, setVotesData] = useState<VoteInPostType>()
 
     const findVotes = useCallback(async () => {
-        const response = await axios.get(`${HOST}/vote/${postId}`, {
+        const response = await axios.get(`${HOST}/group/${groupId}/post/${postId}/vote`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         })
         return response.data;
-    }, [postId])
+    }, [groupId, postId])
 
     const findVoteValidation = useCallback(async () => {
         try {
@@ -50,7 +50,7 @@ const PostContents: React.FC<DetailPostProps> = (
     }
 
     const requestVote = async () => {
-        const response = await axios.post(`${HOST}/vote/group/${groupId}/post/${postId}`, {
+        const response = await axios.post(`${HOST}/group/${groupId}/post/${postId}/vote`, {
             voteStatus,
         }, {
             headers: {

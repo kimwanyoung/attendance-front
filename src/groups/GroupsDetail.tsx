@@ -17,7 +17,7 @@ const GroupsDetail = () => {
     const [isSchedule, setIsSchedule] = useState(true);
     const findAllPostsByGroupId = useCallback(async () => {
         const groupId = Number(param.id);
-        const response = await axios.get<{ group: any, posts: PostCardProps[] }>(`${HOST}/post/${groupId}`, {
+        const response = await axios.get<{ group: any, posts: PostCardProps[] }>(`${HOST}/group/${groupId}/post`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
@@ -63,6 +63,7 @@ const GroupsDetail = () => {
                                      createdAt={post.createdAt} endDate={post.endDate} author={post.author}
                                      timeDifference={calculateTimeDifference(new Date(post.createdAt))}/>
                 })}
+                {!isSchedule && <p className="text-white">ss</p>}
             </Container>
         </ListGroup>
     );
