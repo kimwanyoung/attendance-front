@@ -34,7 +34,7 @@ const GlobalNavbar = () => {
 
     return (
         <>
-            <Navbar className="d-flex justify-content-center align-items-center" variant="dark" style={{
+            <Navbar className="d-flex justify-content-center align-items-center bg-body-tertiary" style={{
                 fontWeight: 400,
                 fontStyle: "normal",
             }}>

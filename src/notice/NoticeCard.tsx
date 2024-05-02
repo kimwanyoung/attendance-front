@@ -2,10 +2,13 @@ import {Card} from "react-bootstrap";
 import React from "react";
 import {NoticeCardType} from "../types/notice-card.type";
 import {textConverter} from "../utils/textConverter";
+import {useNavigate} from "react-router-dom";
 
-const NoticeCard:React.FC<NoticeCardType> = ({title, contents, updatedAt, createdAt}) => {
+const NoticeCard:React.FC<NoticeCardType> = ({id, title, contents, createdAt}) => {
+    const navigate = useNavigate();
+
     return (
-        <Card className="mt-2" style={{minWidth: "100%"}} border="success" >
+        <Card className="mt-2" style={{minWidth: "100%"}} border="success" onClick={() => navigate(`notice/${id}`)}>
             <Card.Body className="d-flex align-items-center justify-content-between">
                 <div className="d-flex flex-column justify-content-center">
                     <Card.Title className="m-0  fs-6">{title}</Card.Title>
@@ -14,7 +17,7 @@ const NoticeCard:React.FC<NoticeCardType> = ({title, contents, updatedAt, create
                     </Card.Text>
                 </div>
                 <Card.Text className="text-success">
-                    {updatedAt.toLocaleString().split("T")[0]}
+                    {createdAt.toLocaleString().split("T")[0]}
                 </Card.Text>
             </Card.Body>
         </Card>

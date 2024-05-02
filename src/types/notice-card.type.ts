@@ -1,9 +1,9 @@
 interface NoticeCardType {
-    id?: number;
-    title: string;
+    author?: { name: string };
     contents: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string
+    id: number;
+    title: string;
 }
 
 export type {NoticeCardType}

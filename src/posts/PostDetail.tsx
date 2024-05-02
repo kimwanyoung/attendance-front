@@ -10,7 +10,17 @@ import PostContents from "./PostContents";
 const PostDetail = () => {
     const navigate = useNavigate();
     const {groupId, postId} = useParams();
-    const [postData, setPostData] = useState<PostModel>();
+    const [postData, setPostData] = useState<PostModel>({
+        id: 0,
+        title: "string",
+        contents: "string",
+        location: "string",
+        eventDate: "string",
+        voteDuration: 0,
+        author: { name: "string" },
+        createdAt: "string",
+        endDate: "string",
+    });
 
     const findPost = useCallback(async () => {
         const response = await axios.get(`${HOST}/group/${groupId}/post/${postId}`, {
@@ -39,10 +49,9 @@ const PostDetail = () => {
     }, [findPostValidation, navigate])
     return (
         <Container className="min-vh-100">
-            {postData &&
                 <PostContents key={postData.id} id={postData.id} contents={postData.contents} author={postData.author}
                               title={postData.title} createdAt={postData.createdAt} eventDate={postData.eventDate}
-                              location={postData.location} endDate={postData.endDate}/>}
+                              location={postData.location} endDate={postData.endDate}/>
         </Container>
     )
 }

@@ -81,7 +81,8 @@ const GroupsDetail = () => {
                                      timeDifference={calculateTimeDifference(new Date(post.createdAt))}/>
                 })}
                 {!isSchedule && notices.map(notice => {
-                    return <NoticeCard key={notice.id} title={notice.title} contents={notice.contents} createdAt={notice.createdAt} updatedAt={notice.updatedAt}/>
+                    return <NoticeCard id={notice.id} key={notice.id} title={notice.title} contents={notice.contents}
+                                       createdAt={notice.createdAt}/>
                 })}
             </Container>
         </ListGroup>
