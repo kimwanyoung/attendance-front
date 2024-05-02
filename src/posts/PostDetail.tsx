@@ -12,14 +12,14 @@ const PostDetail = () => {
     const {groupId, postId} = useParams();
     const [postData, setPostData] = useState<PostModel>({
         id: 0,
-        title: "string",
-        contents: "string",
-        location: "string",
-        eventDate: "string",
+        title: "",
+        contents: "",
+        location: "",
+        eventDate: "",
         voteDuration: 0,
-        author: { name: "string" },
-        createdAt: "string",
-        endDate: "string",
+        author: { name: "" },
+        createdAt: "",
+        endDate: "",
     });
 
     const findPost = useCallback(async () => {
