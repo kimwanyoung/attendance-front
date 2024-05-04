@@ -19,11 +19,10 @@ const GroupCard: React.FC<GroupProps> = ({id, title, description, memberCount}) 
                     <Card.Text className="text-muted m-0">
                         {description}
                     </Card.Text>
-                    <Card.Title className="m-0  fs-6">{title}</Card.Title>
+                    <Card.Title className="m-0 fs-6">{title}</Card.Title>
                 </div>
                 <Card.Text className="text-success">{memberCount}명</Card.Text>
             </Card.Body>
-
         </Card>
     )
 }

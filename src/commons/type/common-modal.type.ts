@@ -4,6 +4,8 @@ interface CommonModalType {
     props: ModalProps;
     title: string;
     body: string;
+    button?: boolean;
+    anyMethod?: any;
 }
 
 export type {CommonModalType};
