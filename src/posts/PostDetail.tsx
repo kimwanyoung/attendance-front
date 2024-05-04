@@ -10,6 +10,7 @@ import PostContents from "./PostContents";
 const PostDetail = () => {
     const navigate = useNavigate();
     const {groupId, postId} = useParams();
+
     const [postData, setPostData] = useState<PostModel>({
         id: 0,
         title: "",

@@ -10,6 +10,7 @@ import axios from "axios";
 import {HOST} from "../const/global.const";
 import {ManageToken} from "../utils/manageToken";
 import {VoteInPostType} from "./types/Vote.type";
+import CommonModal from "../commons/components/CommonModal";
 
 const PostContents: React.FC<DetailPostProps> = (
     {
@@ -26,6 +27,7 @@ const PostContents: React.FC<DetailPostProps> = (
     const {groupId, postId} = useParams();
     const [voteStatus, setVoteStatus] = useState<VoteStatus>(VoteStatus.NOT_VOTED_YET);
     const [votesData, setVotesData] = useState<VoteInPostType>()
+    const [confirmShow, setConfirmShow] = useState(false);
 
     const findVotes = useCallback(async () => {
         const response = await axios.get(`${HOST}/group/${groupId}/post/${postId}/vote`, {
@@ -82,11 +84,33 @@ const PostContents: React.FC<DetailPostProps> = (
         return votesData?.allVotes.filter((data) => data.voteStatus === type).length;
     }
 
+    const handleDeletePost = async () => {
+        try {
+            await axios.delete(`${HOST}/group/${groupId}/post/${postId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                }
+            })
+        } catch (error) {
+            console.error(error);
+        } finally {
+            navigate(-1);
+        }
+    }
+
+    const deleteConfirmModalProps = {
+        show: confirmShow,
+        onHide: () => setConfirmShow(prevState => !prevState),
+    }
+
     return (
         <div className="container mt-4">
             <article className="text-white">
                 <header className="mb-4">
-                    <h1 className="fw-bolder mb-1">{title}</h1>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <h1 className="fw-bolder mb-1">{title}</h1>
+                        <p className="m-0 text-decoration-underline" onClick={() => setConfirmShow(prevState => !prevState)}>삭제</p>
+                    </div>
                     <div className="text-muted fst-italic mt-1">생성일 : {createdAt.split('T')[0]}
                     </div>
                     <div className="text-muted fst-italic mt-1">생성자 : {author.name}
@@ -130,6 +154,8 @@ const PostContents: React.FC<DetailPostProps> = (
                     </Card>
                 </section>
             </article>
+            <CommonModal props={deleteConfirmModalProps} title="삭제 확인" body="정말 삭제하시겠습니까?" anyMethod={handleDeletePost}
+                         button/>
         </div>
     )
 }
